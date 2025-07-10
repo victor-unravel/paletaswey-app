@@ -160,13 +160,11 @@ tz = st_javascript("""await (async () => {
 })().then(returnValue => returnValue)""")
 
 # --- Session Data ---
-if "user_timezone" not in st.session_state:
-    st.session_state.user_timezone = tz
 if "dataPosVisitRecap" not in st.session_state:
     st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
 if "lastUpdatePosVisitRecap" not in st.session_state:
     if tz:
-        now_local = datetime.now(pytz.timezone(st.session_state.user_timezone))
+        now_local = datetime.now(pytz.timezone(tz))
         st.session_state.lastUpdatePosVisitRecap = now_local.strftime("%Y-%m-%d %H:%M:%S")
 if "needs_update" not in st.session_state:
     st.session_state.needs_update = False
@@ -180,12 +178,16 @@ with col1:
 
 if update_trigger:
     with st.spinner("Updating data..."):
+        if tz:
+            now_local = datetime.now(pytz.timezone(tz))
+        else:
+            now_local = datetime.now()
         st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
-        st.session_state.lastUpdatePosVisitRecap = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        st.session_state.lastUpdatePosVisitRecap = now_local.strftime("%Y-%m-%d %H:%M:%S")
         st.success("Data updated!")
 
 with col2:
-    st.caption(f"🕒 Last updated: {st.session_state.lastUpdatePosVisitRecap} ({st.session_state.user_timezone})")
+    st.caption(f"🕒 Last updated: {st.session_state.lastUpdatePosVisitRecap} ({tz})")
 
 # --- Show Download + Data ---
 with col3:
