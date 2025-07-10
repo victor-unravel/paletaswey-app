@@ -6,7 +6,7 @@ import pytz
 import xlsxwriter
 from datetime import datetime, timedelta
 from streamlit_navigation_bar import st_navbar
-import streamlit_js_eval
+from streamlit_js_eval import streamlit_js_eval
 from datetime import datetime
 
 # Odoo settings
