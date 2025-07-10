@@ -153,7 +153,12 @@ st.set_page_config(layout="wide")
 st.title("📊 POS Visit Recap")
 
 # Get user timezone from browser
-tz = streamlit_js_eval("Intl.DateTimeFormat().resolvedOptions().timeZone", key="tz")
+# Pass as dict: {label: js_expression}
+result = streamlit_js_eval(
+    {"timezone": "Intl.DateTimeFormat().resolvedOptions().timeZone"},
+    key="tz"
+)
+tz = result.get("timezone")
 
 # --- Session Data ---
 if "dataPosVisitRecap" not in st.session_state:
