@@ -153,7 +153,7 @@ st.set_page_config(layout="wide")
 st.title("📊 POS Visit Recap")
 
 # Get user timezone from browser
-timezone = st_javascript("""await (async () => {
+tz = st_javascript("""await (async () => {
             const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
             console.log(userTimezone)
             return userTimezone
