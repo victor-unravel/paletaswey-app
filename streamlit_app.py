@@ -5,6 +5,7 @@ import io
 import pytz
 import xlsxwriter
 from datetime import datetime, timedelta
+from streamlit_navigation_bar import st_navbar
 
 # Odoo settings
 url = st.secrets["URL"]
@@ -148,6 +149,7 @@ def showDownloadButtonPosVisitRecap(data):
 # --- UI ---
 st.set_page_config(layout="wide")
 st.title("📊 POS Visit Recap")
+page = st_navbar(["Recap", "Reject", "Expiration"])
 
 # Only fetch data once at top-level or inside update logic
 if 'dataPosVisitRecap' not in st.session_state:
