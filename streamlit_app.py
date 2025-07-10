@@ -6,7 +6,7 @@ import pytz
 import xlsxwriter
 from datetime import datetime, timedelta
 from streamlit_navigation_bar import st_navbar
-from streamlit_js_eval import get_timezone
+import streamlit_js_eval
 from datetime import datetime
 
 # Odoo settings
@@ -153,7 +153,7 @@ st.set_page_config(layout="wide")
 st.title("📊 POS Visit Recap")
 
 # Get user timezone from browser
-tz = get_timezone()
+tz = streamlit_js_eval("Intl.DateTimeFormat().resolvedOptions().timeZone", key="tz")
 
 # --- Session Data ---
 if "dataPosVisitRecap" not in st.session_state:
