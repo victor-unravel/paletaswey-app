@@ -6,8 +6,8 @@ import pytz
 import xlsxwriter
 from datetime import datetime, timedelta
 from streamlit_navigation_bar import st_navbar
-from streamlit_js_eval import streamlit_js_eval
 from datetime import datetime
+from streamlit_javascript import st_javascript
 
 # Odoo settings
 url = st.secrets["URL"]
@@ -153,18 +153,11 @@ st.set_page_config(layout="wide")
 st.title("📊 POS Visit Recap")
 
 # Get user timezone from browser
-# Pass as dict: {label: js_expression}
-# Correct structure: list of dicts with label + expression
-result = streamlit_js_eval(
-    [
-        {
-            "label": "timezone",
-            "expression": "Intl.DateTimeFormat().resolvedOptions().timeZone"
-        }
-    ],
-    key="tz"
-)
-tz = result.get("timezone")
+timezone = st_javascript("""await (async () => {
+            const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            console.log(userTimezone)
+            return userTimezone
+})().then(returnValue => returnValue)""")
 
 # --- Session Data ---
 if "dataPosVisitRecap" not in st.session_state:

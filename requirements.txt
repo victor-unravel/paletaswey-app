@@ -1,4 +1,4 @@
 streamlit
 xlsxwriter
 streamlit-navigation-bar
-streamlit-js-eval
+streamlit_javascript
