@@ -154,8 +154,14 @@ st.title("📊 POS Visit Recap")
 
 # Get user timezone from browser
 # Pass as dict: {label: js_expression}
+# Correct structure: list of dicts with label + expression
 result = streamlit_js_eval(
-    {"timezone": "Intl.DateTimeFormat().resolvedOptions().timeZone"},
+    [
+        {
+            "label": "timezone",
+            "expression": "Intl.DateTimeFormat().resolvedOptions().timeZone"
+        }
+    ],
     key="tz"
 )
 tz = result.get("timezone")
