@@ -113,7 +113,7 @@ def fetchDataPosVisitRecap():
                 'x_studio_qty',
             ],
             [
-                ['x_studio_pos_visit_reported_on', '>=', (datetime.today() - timedelta(days=60)).strftime('%Y-%m-%d')],
+                # ['x_studio_pos_visit_reported_on', '>=', (datetime.today() - timedelta(days=60)).strftime('%Y-%m-%d')],
                 ['x_studio_pos_visit_status', 'in', ['Validated', 'reported']]
             ]
         )
