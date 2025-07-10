@@ -153,21 +153,27 @@ st.title("📊 POS Visit Recap")
 # --- Session Data ---
 if "dataPosVisitRecap" not in st.session_state:
     st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
+if "lastUpdatePosVisitRecap" not in st.session_state:
+    st.session_state.lastUpdatePosVisitRecap = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 if "needs_update" not in st.session_state:
     st.session_state.needs_update = False
 
 # --- Handle Button ---
-col1, col2 = st.columns([1, 1])
+col1, col2, col3 = st.columns(3)
 with col1:
     update_trigger = st.button("🔄 Update Data")
 
 if update_trigger:
     with st.spinner("Updating data..."):
         st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
+        st.session_state.lastUpdatePosVisitRecap = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         st.success("Data updated!")
 
-# --- Show Download + Data ---
 with col2:
+    st.caption(f"🕒 Last updated: {st.session_state.lastUpdatePosVisitRecap}")
+
+# --- Show Download + Data ---
+with col3:
     showDownloadButtonPosVisitRecap(st.session_state.dataPosVisitRecap)
 
 showDataPosVisitRecap(st.session_state.dataPosVisitRecap)
