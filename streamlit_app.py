@@ -12,7 +12,6 @@ db = st.secrets["DB"]
 username = st.secrets["USERNAME"]
 password = st.secrets["API_KEY"]
 
-
 def get_uid():
     payload = {
         "jsonrpc": "2.0",
@@ -48,7 +47,8 @@ def convert_to_timezone(dt_str, tz='Asia/Jakarta'):
     local_dt = utc_dt.astimezone(pytz.timezone(tz))
     return local_dt.strftime('%Y-%m-%d %H:%M')
 
-def prepare_data(lines, all_data):
+def prepare_data_pos_visit_recap(data):
+    lines, all_data = data
     id_to_name = {r["id"]: r["x_name"] for r in all_data if r.get("id") and r.get("x_name")}
 
     pivot = {}
@@ -94,10 +94,8 @@ def prepare_data(lines, all_data):
 
     return df
 
-# --- UI ---
-st.title("📊 POS Visit Recap")
 
-if st.button("🔄 Fetch & Generate Excel"):
+def fetchDataPosVisitRecap():
     with st.spinner("Connecting to Odoo..."):
         uid = get_uid()
 
@@ -114,22 +112,40 @@ if st.button("🔄 Fetch & Generate Excel"):
 
         # Fetch visit headers (id + name)
         visits = fetch_odoo_data(uid, "x_pos_visit", ['id', 'x_name'])
+        return visit_lines, visits
 
-        # Prepare pivoted DataFrame
-        df = prepare_data(visit_lines, visits)
+def showDataPosVisitRecap(data):
+    # Prepare pivoted DataFrame
+    df = prepare_data_pos_visit_recap(data)
 
-        st.success(f"Prepared {len(df)} rows.")
-        st.dataframe(df)
+    st.success(f"Prepared {len(df)} rows.")
+    st.dataframe(df)
 
-        # Export to Excel
-        buffer = io.BytesIO()
-        with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
-            df.to_excel(writer, index=False)
-        buffer.seek(0)
+def showDownloadButtonPosVisitRecap(data):
+    # Prepare pivoted DataFrame
+    df = prepare_data_pos_visit_recap(data)
+    
+    # Export to Excel
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False)
+    buffer.seek(0)
 
-        st.download_button(
-            label="📥 Download Excel",
-            data=buffer,
-            file_name="pos_visit_recap.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+    st.download_button(
+        label="📥 Download Excel",
+        data=buffer,
+        file_name="pos_visit_recap.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+# --- UI ---
+st.title("📊 POS Visit Recap")
+# Initial call
+dataPosVisitRecap = fetchDataPosVisitRecap()
+showDownloadButtonPosVisitRecap(dataPosVisitRecap)
+
+if st.button("🔄 Update Data"):
+    dataPosVisitRecap = fetchDataPosVisitRecap()
+    showDataPosVisitRecap(dataPosVisitRecap)
+
+showDataPosVisitRecap(dataPosVisitRecap)
