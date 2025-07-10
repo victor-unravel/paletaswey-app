@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 import requests
 import io
-from datetime import datetime
 import pytz
 import xlsxwriter
+from datetime import datetime, timedelta
 
 # Odoo settings
 url = st.secrets["URL"]
@@ -94,21 +94,28 @@ def prepare_data_pos_visit_recap(data):
 
     return df
 
-
 def fetchDataPosVisitRecap():
     with st.spinner("Connecting to Odoo..."):
         uid = get_uid()
 
         # Fetch visit line data
-        visit_lines = fetch_odoo_data(uid, "x_pos_visit_line_1233b", [
-            'x_studio_pos_visit_reported_on',
-            'x_studio_pos_visit_reported_by',
-            'x_studio_pos_visit_id',
-            'x_studio_alternative_import_name',
-            'x_studio_pos_visit_status',
-            'x_studio_product',
-            'x_studio_qty',
-        ])
+        visit_lines = fetch_odoo_data(
+            uid, 
+            "x_pos_visit_line_1233b", 
+            [
+                'x_studio_pos_visit_reported_on',
+                'x_studio_pos_visit_reported_by',
+                'x_studio_pos_visit_id',
+                'x_studio_alternative_import_name',
+                'x_studio_pos_visit_status',
+                'x_studio_product',
+                'x_studio_qty',
+            ],
+            [
+                ['x_studio_pos_visit_reported_on', '>=', (datetime.today() - timedelta(days=60)).strftime('%Y-%m-%d')],
+                ['x_studio_pos_visit_status', 'in', ['Validated', 'reported']]
+            ]
+        )
 
         # Fetch visit headers (id + name)
         visits = fetch_odoo_data(uid, "x_pos_visit", ['id', 'x_name'])
