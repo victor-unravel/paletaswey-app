@@ -148,12 +148,12 @@ if 'dataPosVisitRecap' not in st.session_state:
 
 col1, col2 = st.columns([1, 1])
 with col1:
-    showDownloadButtonPosVisitRecap(st.session_state.dataPosVisitRecap)
-
-with col2:
     if st.button("🔄 Update Data"):
         st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
         st.success("Data updated!")
+
+with col2:
+    showDownloadButtonPosVisitRecap(st.session_state.dataPosVisitRecap)
 
 # Always show data
 showDataPosVisitRecap(st.session_state.dataPosVisitRecap)
