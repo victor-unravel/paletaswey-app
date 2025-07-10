@@ -149,21 +149,25 @@ def showDownloadButtonPosVisitRecap(data):
 # --- UI ---
 st.set_page_config(layout="wide")
 st.title("📊 POS Visit Recap")
-# page = st_navbar(["Recap", "Reject", "Expiration"])
 
-# Only fetch data once at top-level or inside update logic
-if 'dataPosVisitRecap' not in st.session_state:
+# --- Session Data ---
+if "dataPosVisitRecap" not in st.session_state:
     st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
+if "needs_update" not in st.session_state:
+    st.session_state.needs_update = False
 
+# --- Handle Button ---
 col1, col2 = st.columns([1, 1])
 with col1:
-    if st.button("🔄 Update Data"):
-        with st.spinner("Updating..."):
-            st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
-        st.experimental_rerun()
+    update_trigger = st.button("🔄 Update Data")
 
+if update_trigger:
+    with st.spinner("Updating data..."):
+        st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
+        st.success("Data updated!")
+
+# --- Show Download + Data ---
 with col2:
     showDownloadButtonPosVisitRecap(st.session_state.dataPosVisitRecap)
 
-# Always show data
 showDataPosVisitRecap(st.session_state.dataPosVisitRecap)
