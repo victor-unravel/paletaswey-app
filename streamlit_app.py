@@ -141,12 +141,16 @@ def showDownloadButtonPosVisitRecap(data):
 # --- UI ---
 st.set_page_config(layout="wide")
 st.title("📊 POS Visit Recap")
-# Initial call
-dataPosVisitRecap = fetchDataPosVisitRecap()
-showDownloadButtonPosVisitRecap(dataPosVisitRecap)
 
-if st.button("🔄 Update Data"):
+col1, col2 = st.columns(2)
+
+with col1:
     dataPosVisitRecap = fetchDataPosVisitRecap()
-    showDataPosVisitRecap(dataPosVisitRecap)
+    showDownloadButtonPosVisitRecap(dataPosVisitRecap)
+
+with col2:
+    if st.button("🔄 Update Data"):
+        dataPosVisitRecap = fetchDataPosVisitRecap()
+        showDataPosVisitRecap(dataPosVisitRecap)
 
 showDataPosVisitRecap(dataPosVisitRecap)
