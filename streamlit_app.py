@@ -159,7 +159,7 @@ if "needs_update" not in st.session_state:
     st.session_state.needs_update = False
 
 # --- Handle Button ---
-col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns([1,1,1])
 with col1:
     update_trigger = st.button("🔄 Update Data")
 
