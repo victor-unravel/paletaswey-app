@@ -139,6 +139,7 @@ def showDownloadButtonPosVisitRecap(data):
     )
 
 # --- UI ---
+st.set_page_config(layout="wide")
 st.title("📊 POS Visit Recap")
 # Initial call
 dataPosVisitRecap = fetchDataPosVisitRecap()
