@@ -118,7 +118,7 @@ def showDataPosVisitRecap(data):
     # Prepare pivoted DataFrame
     df = prepare_data_pos_visit_recap(data)
 
-    st.success(f"Prepared {len(df)} rows.")
+    st.success(f"Total {len(df)} rows.")
     st.dataframe(df)
 
 def showDownloadButtonPosVisitRecap(data):
