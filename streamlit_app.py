@@ -184,7 +184,7 @@ if update_trigger:
             now_local = datetime.now()
         st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
         st.session_state.lastUpdatePosVisitRecap = now_local.strftime("%Y-%m-%d %H:%M:%S")
-        st.success("Data updated!")
+        st.toast("✅ Data updated!", icon="📦")
 
 with col2:
     st.caption(f"🕒 Last updated: {st.session_state.lastUpdatePosVisitRecap} ({tz})")
