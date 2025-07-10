@@ -118,7 +118,7 @@ def showDataPosVisitRecap(data):
     # Prepare pivoted DataFrame
     df = prepare_data_pos_visit_recap(data)
 
-    st.success(f"Total {len(df)} rows.")
+    st.success(f"Total {len(df)} rows")
     st.dataframe(df)
 
 def showDownloadButtonPosVisitRecap(data):
@@ -142,13 +142,18 @@ def showDownloadButtonPosVisitRecap(data):
 st.set_page_config(layout="wide")
 st.title("📊 POS Visit Recap")
 
+# Only fetch data once at top-level or inside update logic
+if 'dataPosVisitRecap' not in st.session_state:
+    st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
+
 col1, col2 = st.columns([1, 1])
 with col1:
-    dataPosVisitRecap = fetchDataPosVisitRecap()
-    showDownloadButtonPosVisitRecap(dataPosVisitRecap)
+    showDownloadButtonPosVisitRecap(st.session_state.dataPosVisitRecap)
+
 with col2:
     if st.button("🔄 Update Data"):
-        dataPosVisitRecap = fetchDataPosVisitRecap()
-        showDataPosVisitRecap(dataPosVisitRecap)
+        st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
+        st.success("Data updated!")
 
-showDataPosVisitRecap(dataPosVisitRecap)
+# Always show data
+showDataPosVisitRecap(st.session_state.dataPosVisitRecap)
