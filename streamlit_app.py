@@ -142,7 +142,7 @@ def showDownloadButtonPosVisitRecap(data):
 st.set_page_config(layout="wide")
 st.title("📊 POS Visit Recap")
 
-col1, col2 = st.columns(2)
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     dataPosVisitRecap = fetchDataPosVisitRecap()
