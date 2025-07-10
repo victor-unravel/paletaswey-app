@@ -34,7 +34,7 @@ def fetch_odoo_data(uid, model, fields, domain=[]):
         "params": {
             "service": "object",
             "method": "execute_kw",
-            "args": [db, uid, password, model, "search_read", domain, {'fields': fields, 'limit': 50000}],
+            "args": [db, uid, password, model, "search_read", [domain], {'fields': fields, 'limit': 50000}],
         },
         "id": 2,
     }
@@ -112,10 +112,10 @@ def fetchDataPosVisitRecap():
                 'x_studio_product',
                 'x_studio_qty',
             ],
-            # [
-                # ['x_studio_pos_visit_reported_on', '>=', (datetime.today() - timedelta(days=60)).strftime('%Y-%m-%d')],
-                # ['x_studio_pos_visit_status', 'in', ['Validated', 'reported']]
-            # ]
+            [
+                ['x_studio_pos_visit_reported_on', '>=', (datetime.today() - timedelta(days=60)).strftime('%Y-%m-%d')],
+                ['x_studio_pos_visit_status', 'in', ['Validated', 'reported']]
+            ]
         )
 
         # Fetch visit headers (id + name)
