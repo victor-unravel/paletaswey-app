@@ -6,6 +6,8 @@ import pytz
 import xlsxwriter
 from datetime import datetime, timedelta
 from streamlit_navigation_bar import st_navbar
+from streamlit_js_eval import get_timezone
+from datetime import datetime
 
 # Odoo settings
 url = st.secrets["URL"]
@@ -150,13 +152,20 @@ def showDownloadButtonPosVisitRecap(data):
 st.set_page_config(layout="wide")
 st.title("📊 POS Visit Recap")
 
+# Get user timezone from browser
+tz = get_timezone()
+
 # --- Session Data ---
 if "dataPosVisitRecap" not in st.session_state:
     st.session_state.dataPosVisitRecap = fetchDataPosVisitRecap()
 if "lastUpdatePosVisitRecap" not in st.session_state:
-    st.session_state.lastUpdatePosVisitRecap = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    if tz:
+        now_local = datetime.now(pytz.timezone(tz))
+        st.session_state.lastUpdatePosVisitRecap = now_local.strftime("%Y-%m-%d %H:%M:%S")
 if "needs_update" not in st.session_state:
     st.session_state.needs_update = False
+
+
 
 # --- Handle Button ---
 col1, col2, col3 = st.columns([1,1,1])
@@ -170,7 +179,7 @@ if update_trigger:
         st.success("Data updated!")
 
 with col2:
-    st.caption(f"🕒 Last updated: {st.session_state.lastUpdatePosVisitRecap}")
+    st.caption(f"🕒 Last updated: {st.session_state.lastUpdatePosVisitRecap} ({tz})")
 
 # --- Show Download + Data ---
 with col3:
